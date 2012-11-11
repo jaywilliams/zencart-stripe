@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Zen Cart - Stripe Payments </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="mm_lodging1.css" type="text/css" />
+</head>
+<body bgcolor="#999966">
+<table width="1000px" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+	<td width="35" nowrap="nowrap"><img src="mm_spacer.gif" alt="" width="15" height="1" border="0" /></td>
+	<td height="60" colspan="3" class="logo" nowrap="nowrap"><br />
+	Stripe Payments Module for Zen Cart</td>
+	<td width="4">&nbsp;</td>
+	<td width="21">&nbsp;</td>
+	</tr>
+
+	<tr bgcolor="#ffffff">
+	<td colspan="6"><img src="mm_spacer.gif" alt="" width="1" height="1" border="0" /></td>
+	</tr>
+
+	<tr bgcolor="#a4c2c2">
+	<td width="35" nowrap="nowrap">&nbsp;</td>
+	<td height="36" colspan="3" id="navigation" class="navText"><a href="index.html">HOME/SUPPORT</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="install.html">INSTALLATION</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="changelog.html">CHANGELOG</a>&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; <a href="conflict.html">KNOWN CONFLICTS/PROBLEMS</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	<td width="4">&nbsp;</td>
+	<td width="21">&nbsp;</td>
+	</tr>
+
+	<tr bgcolor="#ffffff">
+	<td colspan="6"><img src="mm_spacer.gif" alt="" width="1" height="1" border="0" /></td>
+	</tr>
+
+	<tr bgcolor="#ffffff">
+	<td colspan="2" valign="top" bgcolor="#a4c2c2"><img src="images/api-cloud.png" width="227" height="116" align="right" />
+		<table border="0" cellspacing="0" cellpadding="0" width="239">
+		<tr>
+		<td width="15">&nbsp;</td>
+		<td width="211" class="sidebarText" id="padding"><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="MFWY4LFKKKQQG">
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+<img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+</form>
+			<p>If the module floats your boat then please feel free to send me some beer tokens.</p>
+			<p>After currency conversions, PayPal fees &amp; UK income tax I get around 70 - 75% of what you send.<br />
+	&nbsp;<br />		
+				</p></td>
+		<td width="13">&nbsp;</td>
+		</tr>
+	</table>	</td>
+	<td width="4" valign="top">&nbsp;</td>
+	<td width="731" valign="top">
+	<table border="0" cellspacing="0" cellpadding="0" width="731">
+		<tr>
+		<td width="731" class="pageName"><p>Known issues/problems</p></td>
+		</tr>
+
+		<tr>
+		<td class="bodyText">
+		
+		<p class="pageName">CVV and AVS checks</p>
+		<p>As of November 2012 Stripe can sometimes return a successful payment combined with a CVV/AVS failure or unchecked status. Rather than have these orders go through with whichever status you have selected for successful ones 
+		I have coded in some new order statuses that you may use if you wish - it's up to you but, particularly with downloadable products, I would exercise some care here and read up on how Stripe handles these.<p>More infomation on this at: <a href="https://answers.stripe.com/questions/cvc-status-unchecked" target="_parent">Stripe</a>		
+		<p class="pageName">Saved cards - customer and card objects</p>
+		<p> A quick Stripe 101 here - Stripe works in a couple of ways - you can simply create a 'card object' for each sale and leave it at that. Alternatively you  can create a 'customer object' and attach a 'card object' to that customer for their first purchase. After that you can just charge the customer object - that's how this module is set up.<br />
+		You can modify the card object attached to a customer but you cannot replace it with an empty value - if a customer no longer wants to have any card attached to his object then you have to delete the customer object.
+		All very confusing but that's how it works at the moment - more info <a href="https://answers.stripe.com/questions/how-do-you-clear-or-delete-the-customer-object-s-active-card" target="_blank">here</a>.
+		<br />
+		<br />
+		Don't confuse this with a customer record in your store though - the two are unlinked entities so deleting the customer object at Stripe does not have any affect on the customer account in Zen Cart<br />
+		<br />
+		I have decided not to give customers control of Stripe cards/accounts other than through the final checkout page (i.e. they can change/delete a card only in conjunction with a sale) as there may be a future point where a store has a customer linked up to a recurring payment via Stripe - if we allow a customer to remove a card under those circumstances then it could lead to a loss for the store. (likewise I have provided the admin option of NOT allowing customers to opt out of saving their card at Stripe for scenarios like recurring payments)<br />
+		<br />
+		It is always open for customers to opt out of saving a card/asking the store owner to unlink it at Stripe<br /></td>
+		</tr>
+	</table>	</td>
+	<td width="4">&nbsp;</td>
+	<td width="21">&nbsp;</td>
+	</tr>
+
+	<tr bgcolor="#ffffff">
+	<td colspan="6"><img src="mm_spacer.gif" alt="" width="1" height="1" border="0" /></td>
+	</tr>
+
+	<tr>
+	<td width="35">&nbsp;</td>
+	<td width="205">&nbsp;</td>
+	<td>&nbsp;</td>
+	<td width="731">&nbsp;</td>
+	<td width="4">&nbsp;</td>
+	<td width="21">&nbsp;</td>
+	</tr>
+</table>
+</body>
+</html>
