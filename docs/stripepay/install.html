@@ -61,7 +61,7 @@
 
 		<tr>
 		<td class="bodyText">
-		<img src="images/admin_install.png" alt="admin install" width="278" height="833" align="right" />
+		<img src="images/admin_install.png" alt="admin install" width="286" height="854" align="right" />
 		<p>Download and unzip the payment module package from the Zen Cart website and upload the files to your store. Now go to your admin > modules >payment and you should see an entry for Stripe:</p>
 		<p>Let's run through the options as shown on the right.		</p>
 		<p><strong>Enable Stripe Payments</strong> - fairly simple - True will display Stripe to your customers, false will disable it.</p>
@@ -75,6 +75,7 @@
 		<p><strong>CVV failure order status</strong> - when you install the  module it will add a new order status of Stripe - CVV Failure which will  automatically be given to orders that have failed a CVV check - you can  alter that here if you wish. (see<a href="conflict.html" title="Known issues" target="_parent"> Known Issues</a>)</p>
 		<p><strong>CVV unchecked order status</strong> - sometimes a bank may  not check a submitted CVV and Stripe will pass you back an 'unchecked'  response - as with a CVV failure we have added a new order status in to  flag this up for you - you can alter that here if you wish. (see<a href="conflict.html" title="Known issues" target="_parent"> Known Issues</a>)</p>
 		<p><strong>Enable AVS Checking</strong> - if you enable AVS checking  then the module will send your customer's address details to Stripe who  will, in turn, run an AVS check with the customer's bank. The response  from the bank will be notified back to you. (see<a href="conflict.html" title="Known issues" target="_parent"> Known Issues</a>)</p>
+		<p><strong>Create a Customer Object at Stripe?</strong> - allows you to either just use Stripe as a straightforward card processor (false) or setup a Customer Object at Stripe (true). If set to false then <strong>Allow customers option not to save their card details?</strong> and <strong>Above option checked or unchecked?</strong> will both have no effect on teh front end.</p>
 		<p><strong>AVS failure order status</strong> - as with CVV checking we  have added in a new order status for AVS failure which will  automatically be assigned to failed checks - you can alter that if you  wish (see<a href="conflict.html" title="Known issues" target="_parent"> Known Issues</a>)</p>
 		<p><strong>AVS unchecked order status</strong> - as with the CVV check  you may receive a response of unchecked for your AVS request - these  orders will be flagged up with whichever status you select here - I have pre selected the new 'Stripe - AVS unchecked' one for you (see<a href="conflict.html" title="Known issues" target="_parent"> Known Issues</a>)</p>
 		<p><strong>Allow customers option not to save their card details? - </strong>you can, if you wish, display an option for customers to choose not to save their card details at Stripe. (see<a href="conflict.html" title="Known issues" target="_parent"> Known Issues</a>)</p>

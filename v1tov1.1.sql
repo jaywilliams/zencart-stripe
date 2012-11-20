@@ -1,0 +1,1 @@
+INSERT INTO `configuration` VALUES ('', 'Create a Customer Object at Stripe?', 'MODULE_PAYMENT_STRIPEPAY_CREATE_OBJECT', 'True', 'Do you want to create Customer Objects at Stripe (True) or just charge the card every time (False)?', 6, 75, NULL, '2012-11-11 06:42:07', NULL, 'zen_cfg_select_option(array(''True'', ''False''), ');

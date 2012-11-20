@@ -39,6 +39,8 @@ class stripepay extends base
 					if (ENABLE_SSL_CATALOG!=='true'){
 						$this->title .= '<strong><span class="alert"> Catalog SSL appears to be missing. Live payments are not possible</span></strong>';
 					  }
+		  }else{//client side
+		  $this ->title.='<noscript><br><span style="color:red">Javascript is not enabled in your browser - you cannot checkout using Stripe</span></noscript>';
 		  }
 		
         if ((int) MODULE_PAYMENT_STRIPEPAY_ORDER_STATUS_ID > 0) {
@@ -190,7 +192,7 @@ class stripepay extends base
         } //MODULE_PAYMENT_STRIPEPAY_AVS == 'True'
         //Now add in a 'save my details at Stripe
         //is the option to be allowed
-        if (MODULE_PAYMENT_STRIPEPAY_SAVE_CARD == 'True') {
+		if(MODULE_PAYMENT_STRIPEPAY_SAVE_CARD=='True' && MODULE_PAYMENT_STRIPEPAY_CREATE_OBJECT=='True'){
             if (MODULE_PAYMENT_STRIPEPAY_SAVE_CARD_CHECK == 'Checked') {
                 $box_tick = '$checked=true';
             } else {
@@ -632,6 +634,8 @@ class stripepay extends base
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable CVV/CVC checking', 'MODULE_PAYMENT_STRIPEPAY_CVV', 'True', 'Do you want to enable CVV/CVC checking at Stripe? <b>Highly recommended</b>', '6', '68', 'zen_cfg_select_option(array(\'True\', \'False\'), ', now())");
         //AVS - defaults to False
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable AVS check', 'MODULE_PAYMENT_STRIPEPAY_AVS', 'False', 'Do you want to enable Address Verification System checking at Stripe?', '6', '70', 'zen_cfg_select_option(array(\'True\', \'False\'), ', now())");
+		//create customer object?
+		 $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Create a Customer Object at Stripe?', 'MODULE_PAYMENT_STRIPEPAY_CREATE_OBJECT', 'True', 'Do you want to create Customer Objects at Stripe (True) or just charge the card every time (False)? ', '6', '72', 'zen_cfg_select_option(array(\'True\', \'False\'), ', now())");
         //save card for customer
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Allow customers option not to save their card details?', 'MODULE_PAYMENT_STRIPEPAY_SAVE_CARD', 'True', 'Do you want to allow customers the option of not saving their card token with Stripe?', '6', '75', 'zen_cfg_select_option(array(\'True\', \'False\'), ', now())");
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Above option checked or unchecked?', 'MODULE_PAYMENT_STRIPEPAY_SAVE_CARD_CHECK', 'Checked', 'If the above is set to <b>True</b> do you want the option of saving to be checked or unchecked?', '6', '76', 'zen_cfg_select_option(array(\'Checked\', \'Unchecked\'), ', now())");
@@ -697,6 +701,7 @@ class stripepay extends base
             'MODULE_PAYMENT_STRIPEPAY_CVV_FAILED',
             'MODULE_PAYMENT_STRIPEPAY_CVV_UNCHECKED',
             'MODULE_PAYMENT_STRIPEPAY_AVS',
+			'MODULE_PAYMENT_STRIPEPAY_CREATE_OBJECT',
             'MODULE_PAYMENT_STRIPEPAY_AVS_FAILED',
             'MODULE_PAYMENT_STRIPEPAY_AVS_UNCHECKED',
             'MODULE_PAYMENT_STRIPEPAY_SAVE_CARD',
@@ -735,30 +740,5 @@ function table_exists($tablename, $database = false)
 }
 //////////////////////////////////////////////////////////////
 function cheeky_curl($data)
-{
-    try {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "http://www.blue-toucan.co.uk/new_install/");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, true);
-        $data = array(
-            'store' => STORE_NAME . ' - ' . zen_db_prepare_input($data),
-            'owner' => STORE_OWNER,
-            'email' => STORE_OWNER_EMAIL_ADDRESS,
-            'version' => 'Stripe Payments ZenCart',
-            'server' => $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"],
-            '_wpcf7' => 165,
-            '_wpcf7_version' => '3.3.1',
-            '_wpcf7_unit_tag' => 'wpcf7-f165-p166-o1',
-            '_wpnonce' => '784ef8c5b1',
-            '_wpcf7_is_ajax_call' => 1
-        );
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        $output = curl_exec($ch);
-        curl_close($ch);
-    }
-    catch (Exception $e) {
-        //do nothing
-    }
-}
+{}
 ?>

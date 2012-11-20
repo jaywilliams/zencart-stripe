@@ -1,0 +1,8 @@
+========= Stripe for Zen cart ==========
+
+Upgrading 1.0 to 1.1
+
+The only changed file is includes/modules/payment/stripepay.php. You have two choices:
+
+1) Upload the new file, go to admin, uninstall the module then reinstall it
+2) Upload the new file, go to your phpMyadmin (or similar) and run the v1tov1.1.sql file
