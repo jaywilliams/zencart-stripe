@@ -8,4 +8,8 @@ http://www.zen-cart.com/showthread.php?201999-Stripe-com-payment-integration-mod
 
 ==== v1.1 ====
 
-Introduces a new admin control whether to create Customer Objects - also a warning to the customer on teh frotn end that they cannot checkout if javascript is disabled in their browser.
+Introduces a new admin control whether to create Customer Objects - also a warning to the customer on the front end that they cannot checkout if javascript is disabled in their browser.
+
+==== v1.2 ====
+
+Takes the above mentioned javascript text out of the file as it was being appended to the 'success' emails.
