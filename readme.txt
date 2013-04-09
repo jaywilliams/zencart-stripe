@@ -13,3 +13,9 @@ Introduces a new admin control whether to create Customer Objects - also a warni
 ==== v1.2 ====
 
 Takes the above mentioned javascript text out of the file as it was being appended to the 'success' emails.
+
+==== v 1.3 =====
+
+Added in EUR and GBP as currency choices
+Edited CAN to CAD to allow CAD currency to work
+Fixed error in billing address (previously was using shipping)

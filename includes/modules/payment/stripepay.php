@@ -21,7 +21,7 @@ class stripepay extends base
     {
         global $order,$messageStack;;
         $this->code            = 'stripepay';
-        $this->api_version     = 'Stripe Payments v 1.2 for ZenCart';
+        $this->api_version     = 'Stripe Payments v 1.3 for ZenCart';
         $this->title           = MODULE_PAYMENT_STRIPEPAY_TEXT_TITLE;
         $this->description     = MODULE_PAYMENT_STRIPEPAY_TEXT_DESCRIPTION;
         $this->sort_order      = MODULE_PAYMENT_STRIPEPAY_SORT_ORDER;
@@ -39,6 +39,8 @@ class stripepay extends base
 					if (ENABLE_SSL_CATALOG!=='true'){
 						$this->title .= '<strong><span class="alert"> Catalog SSL appears to be missing. Live payments are not possible</span></strong>';
 					  }
+		  }else{//client side
+		  $this ->title.='<noscript><br><span style="color:red">Javascript is not enabled in your browser - you cannot checkout using Stripe</span></noscript>';
 		  }
 		
         if ((int) MODULE_PAYMENT_STRIPEPAY_ORDER_STATUS_ID > 0) {
@@ -109,19 +111,38 @@ class stripepay extends base
 ?>
 
         <?php 
+		##################### displays month name in drop down ###############
         for ($i = 1; $i < 13; $i++) {
             $expires_month[] = array(
                 'id' => sprintf('%02d', $i),
                 'text' => strftime('%B', mktime(0, 0, 0, $i, 1, 2000))
             );
         } //$i = 1; $i < 13; $i++
+		##################### displays month name in drop down ###############
+		##################### displays month name and number in brackets  in drop down ###############
+/*		    for ($i=1; $i<13; $i++) {
+      $expires_month[] = array('id' => sprintf('%02d', $i), 'text' => strftime('%B - (%m)',mktime(0,0,0,$i,1,2000)));
+    }
         $today = getdate();
         for ($i = $today['year']; $i < $today['year'] + 10; $i++) {
             $expires_year[] = array(
                 'id' => strftime('%y', mktime(0, 0, 0, 1, 1, $i)),
                 'text' => strftime('%Y', mktime(0, 0, 0, 1, 1, $i))
             );
-        } //$i = $today['year']; $i < $today['year'] + 10; $i++
+        } */
+		##################### displays month name and number in brackets  in drop down ###############
+		##################### displays month  number  in drop down ###############
+/*				    for ($i=1; $i<13; $i++) {
+      $expires_month[] = array('id' => sprintf('%02d', $i), 'text' => strftime('%m',mktime(0,0,0,$i,1,2000)));
+    }
+        $today = getdate();
+        for ($i = $today['year']; $i < $today['year'] + 10; $i++) {
+            $expires_year[] = array(
+                'id' => strftime('%y', mktime(0, 0, 0, 1, 1, $i)),
+                'text' => strftime('%Y', mktime(0, 0, 0, 1, 1, $i))
+            );
+        } */
+		##################### displays month  number  in drop down ###############
         $confirmation           = array();
         $confirmation['fields'] = array();
         //prev customer
@@ -169,23 +190,23 @@ class stripepay extends base
             );
             $confirmation['fields'][] = array(
                 'title' => '',
-                'field' => zen_draw_hidden_field('', $order->customer['suburb'], 'class="address_line2"')
+                'field' => zen_draw_hidden_field('', $order->billing['suburb'], 'class="address_line2"')
             );
             $confirmation['fields'][] = array(
                 'title' => '',
-                'field' => zen_draw_hidden_field('', $order->customer['state'], 'class="address_state"')
+                'field' => zen_draw_hidden_field('', $order->billing['state'], 'class="address_state"')
             );
             $confirmation['fields'][] = array(
                 'title' => '',
-                'field' => zen_draw_hidden_field('', $order->customer['postcode'], 'class="address_zip"')
+                'field' => zen_draw_hidden_field('', $order->billing['postcode'], 'class="address_zip"')
             );
             $confirmation['fields'][] = array(
                 'title' => '',
-                'field' => zen_draw_hidden_field('', $order->customer['city'], 'class="address_city"')
+                'field' => zen_draw_hidden_field('', $order->billing['city'], 'class="address_city"')
             );
             $confirmation['fields'][] = array(
                 'title' => '',
-                'field' => zen_draw_hidden_field('', $order->customer['country']['title'], 'class="address_country"')
+                'field' => zen_draw_hidden_field('', $order->billing['country']['title'], 'class="address_country"')
             );
         } //MODULE_PAYMENT_STRIPEPAY_AVS == 'True'
         //Now add in a 'save my details at Stripe
@@ -617,8 +638,8 @@ class stripepay extends base
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, use_function, date_added) values ('AVS unchecked order status', 'MODULE_PAYMENT_STRIPEPAY_AVS_UNCHECKED', '" . $status_id4 . "', 'If AVS checking is activated what order status do you want to apply to cases where the AVS is returned as unchecked?', '6', '71', 'zen_cfg_pull_down_order_statuses(', 'zen_get_order_status_name', now())");
         // test or production?
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Transaction Mode', 'MODULE_PAYMENT_STRIPEPAY_TESTMODE', 'Test', 'Transaction mode used for processing orders', '6', '50', 'zen_cfg_select_option(array(\'Test\', \'Production\'), ', now())");
-        //USD or CAN
-        $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Stripe Currency', 'MODULE_PAYMENT_STRIPEPAY_CURRENCY', 'USD', 'The currency that your Stripe account is setup to handle - currently only a choice between USD and CAN - <b>make sure that your store is operating in the same currency!!</b>', '6', '50', 'zen_cfg_select_option(array(\'USD\', \'CAN\'), ', now())");
+        //USD or CAN or GBP or EUR
+        $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Stripe Currency', 'MODULE_PAYMENT_STRIPEPAY_CURRENCY', 'USD', 'The currency that your Stripe account is setup to handle - currently only a choice between USD and CAD - <b>make sure that your store is operating in the same currency!!</b>', '6', '50', 'zen_cfg_select_option(array(\'USD\', \'CAD\', \'EUR\',\'GBP\'), ', now())");
         //API keys
         //Testing Secret Key
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Testing Secret Key', 'MODULE_PAYMENT_STRIPEPAY_TESTING_SECRET_KEY', '', 'Testing Secret Key - obtainable in your Strip dashboard.', '6', '60', now())");
