@@ -19,3 +19,8 @@ Takes the above mentioned javascript text out of the file as it was being append
 Added in EUR and GBP as currency choices
 Edited CAN to CAD to allow CAD currency to work
 Fixed error in billing address (previously was using shipping)
+
+==== v 1.3.1 =====
+
+fixed commenting error in dropdown thanks to fretsbr549
+added floor() to all instances of ($order->info['total']) * 100   - thanks to filmgirl

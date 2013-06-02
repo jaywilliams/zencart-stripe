@@ -21,7 +21,7 @@ class stripepay extends base
     {
         global $order,$messageStack;;
         $this->code            = 'stripepay';
-        $this->api_version     = 'Stripe Payments v 1.3 for ZenCart';
+        $this->api_version     = 'Stripe Payments v 1.3.1 for ZenCart';
         $this->title           = MODULE_PAYMENT_STRIPEPAY_TEXT_TITLE;
         $this->description     = MODULE_PAYMENT_STRIPEPAY_TEXT_DESCRIPTION;
         $this->sort_order      = MODULE_PAYMENT_STRIPEPAY_SORT_ORDER;
@@ -117,19 +117,18 @@ class stripepay extends base
                 'id' => sprintf('%02d', $i),
                 'text' => strftime('%B', mktime(0, 0, 0, $i, 1, 2000))
             );
-        } //$i = 1; $i < 13; $i++
-		##################### displays month name in drop down ###############
-		##################### displays month name and number in brackets  in drop down ###############
-/*		    for ($i=1; $i<13; $i++) {
-      $expires_month[] = array('id' => sprintf('%02d', $i), 'text' => strftime('%B - (%m)',mktime(0,0,0,$i,1,2000)));
-    }
+        } 
+		
+
+
         $today = getdate();
         for ($i = $today['year']; $i < $today['year'] + 10; $i++) {
             $expires_year[] = array(
                 'id' => strftime('%y', mktime(0, 0, 0, 1, 1, $i)),
                 'text' => strftime('%Y', mktime(0, 0, 0, 1, 1, $i))
             );
-        } */
+        } 
+		
 		##################### displays month name and number in brackets  in drop down ###############
 		##################### displays month  number  in drop down ###############
 /*				    for ($i=1; $i<13; $i++) {
@@ -353,7 +352,9 @@ class stripepay extends base
                 //charge the customer on existing card
                 try {
                     $charge = Stripe_Charge::create(array(
-                        "amount" => ($order->info['total']) * 100, // amount in cents
+                        //"amount" => ($order->info['total']) * 100, // amount in cents
+						//fimgirl fix for total
+						"amount" =>floor(($order->info['total']) * 100),  
                         "currency" => MODULE_PAYMENT_STRIPEPAY_CURRENCY,
                         "customer" => $_POST['StripeCustomerID']
                     ));
@@ -374,7 +375,9 @@ class stripepay extends base
                     $cu->save();
                     //charge the customer
                     $charge = Stripe_Charge::create(array(
-                        "amount" => ($order->info['total']) * 100, // amount in cents
+                        //"amount" => ($order->info['total']) * 100, // amount in cents
+						//fimgirl fix for total
+						"amount" =>floor(($order->info['total']) * 100),  
                         "currency" => MODULE_PAYMENT_STRIPEPAY_CURRENCY,
                         "customer" => $_POST['StripeCustomerID']
                     ));
@@ -390,7 +393,9 @@ class stripepay extends base
                 try {
                     // create the charge on Stripe's servers - this will charge the user's card no customer object
                     $charge = Stripe_Charge::create(array(
-                        "amount" => ($order->info['total']) * 100, // amount in cents
+                       // "amount" => ($order->info['total']) * 100, // amount in cents
+									//fimgirl fix for total
+						"amount" =>floor(($order->info['total']) * 100),  
                         "currency" => MODULE_PAYMENT_STRIPEPAY_CURRENCY,
                         "card" => $token,
                         "description" => $order->customer['email_address']
@@ -414,7 +419,9 @@ class stripepay extends base
                 ));
                 // charge the Customer instead of the card
                 $charge   = Stripe_Charge::create(array(
-                    "amount" => ($order->info['total']) * 100, // amount in cents
+                //    "amount" => ($order->info['total']) * 100, // amount in cents
+										//fimgirl fix for total
+					"amount" =>floor(($order->info['total']) * 100),  
                     "currency" => MODULE_PAYMENT_STRIPEPAY_CURRENCY,
                     "customer" => $customer->id
                 ));
@@ -431,7 +438,9 @@ class stripepay extends base
             try {
                 // create the charge on Stripe's servers - this will charge the user's card no customer object
                 $charge = Stripe_Charge::create(array(
-                    "amount" => ($order->info['total']) * 100, // amount in cents
+                  //  "amount" => ($order->info['total']) * 100, // amount in cents
+											//fimgirl fix for total
+					"amount" =>floor(($order->info['total']) * 100),  
                     "currency" => MODULE_PAYMENT_STRIPEPAY_CURRENCY,
                     "card" => $token,
                     "description" => $order->customer['email_address']
