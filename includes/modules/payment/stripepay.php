@@ -21,7 +21,7 @@ class stripepay extends base
     {
         global $order,$messageStack;;
         $this->code            = 'stripepay';
-        $this->api_version     = 'Stripe Payments v 1.3.1 for ZenCart';
+        $this->api_version     = 'Stripe Payments v 1.3.2 for ZenCart';
         $this->title           = MODULE_PAYMENT_STRIPEPAY_TEXT_TITLE;
         $this->description     = MODULE_PAYMENT_STRIPEPAY_TEXT_DESCRIPTION;
         $this->sort_order      = MODULE_PAYMENT_STRIPEPAY_SORT_ORDER;
@@ -39,8 +39,6 @@ class stripepay extends base
 					if (ENABLE_SSL_CATALOG!=='true'){
 						$this->title .= '<strong><span class="alert"> Catalog SSL appears to be missing. Live payments are not possible</span></strong>';
 					  }
-		  }else{//client side
-		  $this ->title.='<noscript><br><span style="color:red">Javascript is not enabled in your browser - you cannot checkout using Stripe</span></noscript>';
 		  }
 		
         if ((int) MODULE_PAYMENT_STRIPEPAY_ORDER_STATUS_ID > 0) {

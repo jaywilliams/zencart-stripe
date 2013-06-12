@@ -24,3 +24,7 @@ Fixed error in billing address (previously was using shipping)
 
 fixed commenting error in dropdown thanks to fretsbr549
 added floor() to all instances of ($order->info['total']) * 100   - thanks to filmgirl
+
+==== v 1.3.2 =====
+
+removed <noscript> tags in title field as it was throwing an error for admin orders page
