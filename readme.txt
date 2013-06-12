@@ -28,3 +28,7 @@ added floor() to all instances of ($order->info['total']) * 100   - thanks to fi
 ==== v 1.3.2 =====
 
 removed <noscript> tags in title field as it was throwing an error for admin orders page
+
+==== v 1.3.3 =====
+
+Changed TYPE=MyISAM to ENGINE=MyISAM in includes/modules/payment/stripepay.php

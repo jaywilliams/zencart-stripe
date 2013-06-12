@@ -702,7 +702,7 @@ class stripepay extends base
                   `stripe_exp_year` int(4) NOT NULL,
                   `stripe_type` varchar(64) NOT NULL,
                   PRIMARY KEY  (`stripe_id`)
-                ) TYPE=MyISAM  AUTO_INCREMENT=1 ;");
+                ) ENGINE=MyISAM  AUTO_INCREMENT=1 ;");
     }
     function remove()
     {
