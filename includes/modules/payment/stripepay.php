@@ -27,20 +27,20 @@ class stripepay extends base
         $this->sort_order      = MODULE_PAYMENT_STRIPEPAY_SORT_ORDER;
         $this->enabled         = ((MODULE_PAYMENT_STRIPEPAY_STATUS == 'True') ? true : false);
         $this->form_action_url = '';
-		//admin title info
-		  if (IS_ADMIN_FLAG === true) {
-		  	        if (!function_exists('curl_init')) $this->title .= '<strong><span class="alert"> CURL NOT FOUND. Cannot Use.</span></strong>';
-					if ( MODULE_PAYMENT_STRIPEPAY_TESTING_SECRET_KEY == '' ||
-          				 MODULE_PAYMENT_STRIPEPAY_TESTING_PUBLISHABLE_KEY == '' ||
+        //admin title info
+          if (IS_ADMIN_FLAG === true) {
+                    if (!function_exists('curl_init')) $this->title .= '<strong><span class="alert"> CURL NOT FOUND. Cannot Use.</span></strong>';
+                    if ( MODULE_PAYMENT_STRIPEPAY_TESTING_SECRET_KEY == '' ||
+                         MODULE_PAYMENT_STRIPEPAY_TESTING_PUBLISHABLE_KEY == '' ||
                          MODULE_PAYMENT_STRIPEPAY_MERCHANT_LIVE_SECRET_KEY == '' ||
                          MODULE_PAYMENT_STRIPEPAY_LIVE_PUBLISHABLE_KEY == ''){
-						 $this->title .= '<strong><span class="alert"> One of your Stripe API keys is missing.</span></strong>';
-						 }
-					if (ENABLE_SSL_CATALOG!=='true'){
-						$this->title .= '<strong><span class="alert"> Catalog SSL appears to be missing. Live payments are not possible</span></strong>';
-					  }
-		  }
-		
+                         $this->title .= '<strong><span class="alert"> One of your Stripe API keys is missing.</span></strong>';
+                         }
+                    if (ENABLE_SSL_CATALOG!=='true'){
+                        $this->title .= '<strong><span class="alert"> Catalog SSL appears to be missing. Live payments are not possible</span></strong>';
+                      }
+          }
+
         if ((int) MODULE_PAYMENT_STRIPEPAY_ORDER_STATUS_ID > 0) {
             $this->order_status = MODULE_PAYMENT_STRIPEPAY_ORDER_STATUS_ID;
         } //(int) MODULE_PAYMENT_STRIPEPAY_ORDER_STATUS_ID > 0
@@ -100,7 +100,7 @@ class stripepay extends base
         //Stripe - check the stripe-id table for a stripe customer number
         $prev_customer = false;
         if (table_exists('stripe_data')) {
-            //this will get the most recent order by this customer only - will ignore previous orders    
+            //this will get the most recent order by this customer only - will ignore previous orders
             $check_customer = $db->Execute("select customers_id, stripe_customer, stripe_fingerprint, stripe_last4, stripe_type from stripe_data where customers_id = '" .$_SESSION['customer_id'] . "' order by stripe_id DESC LIMIT 1");
             if ($check_customer->RecordCount() > 0 && zen_not_null($check_customer->fields['stripe_customer'])) {
                 $prev_customer = true;
@@ -108,15 +108,15 @@ class stripepay extends base
         }
 ?>
 
-        <?php 
-		##################### displays month name in drop down ###############
+        <?php
+        ##################### displays month name in drop down ###############
         for ($i = 1; $i < 13; $i++) {
             $expires_month[] = array(
                 'id' => sprintf('%02d', $i),
-                'text' => strftime('%B', mktime(0, 0, 0, $i, 1, 2000))
+                'text' => strftime('%m - %B', mktime(0, 0, 0, $i, 1, 2000))
             );
-        } 
-		
+        }
+
 
 
         $today = getdate();
@@ -125,11 +125,11 @@ class stripepay extends base
                 'id' => strftime('%y', mktime(0, 0, 0, 1, 1, $i)),
                 'text' => strftime('%Y', mktime(0, 0, 0, 1, 1, $i))
             );
-        } 
-		
-		##################### displays month name and number in brackets  in drop down ###############
-		##################### displays month  number  in drop down ###############
-/*				    for ($i=1; $i<13; $i++) {
+        }
+
+        ##################### displays month name and number in brackets  in drop down ###############
+        ##################### displays month  number  in drop down ###############
+/*                  for ($i=1; $i<13; $i++) {
       $expires_month[] = array('id' => sprintf('%02d', $i), 'text' => strftime('%m',mktime(0,0,0,$i,1,2000)));
     }
         $today = getdate();
@@ -139,12 +139,12 @@ class stripepay extends base
                 'text' => strftime('%Y', mktime(0, 0, 0, 1, 1, $i))
             );
         } */
-		##################### displays month  number  in drop down ###############
+        ##################### displays month  number  in drop down ###############
         $confirmation           = array();
         $confirmation['fields'] = array();
         //prev customer
         if ($prev_customer == true ) { //previous customer with a stripe id
-		
+
             $confirmation['fields'][] = array(
                 'title' => '<div class="back">' .zen_draw_checkbox_field('', 'use_me', $checked = true, 'class="existing_stripe" style="display:inline"'). MODULE_PAYMENT_STRIPEPAY_TEXT_PREV_CUST_CARD . ' ' . $check_customer->fields['stripe_type'] . ' ' . MODULE_PAYMENT_STRIPEPAY_TEXT_PREV_CUST_NUMBER . ' ' . $check_customer->fields['stripe_last4'] . ' ' . MODULE_PAYMENT_STRIPEPAY_TEXT_PREV_CUST_PAY  . '<span id="stripe_tick">' . MODULE_PAYMENT_STRIPEPAY_TEXT_PREV_CUST_UNTICK . '</span>'.'</div>',
                 'field' => ''
@@ -179,7 +179,7 @@ class stripepay extends base
                 'field' => ''
             );
         } //MODULE_PAYMENT_STRIPEPAY_CVV == 'True'
-        //AVS                
+        //AVS
         if (MODULE_PAYMENT_STRIPEPAY_AVS == 'True') {
             $confirmation['fields'][] = array(
                 'title' => '',
@@ -208,7 +208,7 @@ class stripepay extends base
         } //MODULE_PAYMENT_STRIPEPAY_AVS == 'True'
         //Now add in a 'save my details at Stripe
         //is the option to be allowed
-		if(MODULE_PAYMENT_STRIPEPAY_SAVE_CARD=='True' && MODULE_PAYMENT_STRIPEPAY_CREATE_OBJECT=='True'){
+        if(MODULE_PAYMENT_STRIPEPAY_SAVE_CARD=='True' && MODULE_PAYMENT_STRIPEPAY_CREATE_OBJECT=='True'){
             if (MODULE_PAYMENT_STRIPEPAY_SAVE_CARD_CHECK == 'Checked') {
                 $box_tick = '$checked=true';
             } else {
@@ -230,27 +230,27 @@ class stripepay extends base
         <?php
         $confirmation['title'] = '<style type="text/css">.back{width:'.trim(MODULE_PAYMENT_STRIPEPAY_WIDTH).'px;}</style>';
         $confirmation['title'] .= '<script type="text/javascript">    if (typeof jQuery == "undefined") {//no jquery
-        
+
                                 document.write("<script type=\"text/javascript\" src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js\">");
                                 document.write("<\/script>");} </script>';
-        if ($prev_customer == true) { //previous customer with a stripe id          
+        if ($prev_customer == true) { //previous customer with a stripe id
             $confirmation['title'] .= '  <script type="text/javascript">
-                                            $(document).ready(function() {                                        
+                                            $(document).ready(function() {
                                             $(".card_hide").hide();
-                                            $(".existing_stripe").change(function() {                                        
-                                                                                    
-                                            $(".card_hide").toggle("slow");                                        
+                                            $(".existing_stripe").change(function() {
+
+                                            $(".card_hide").toggle("slow");
                                              if ( $(".existing_stripe:checked").length > 0) {
                                              $("#stripe_tick").html("' . MODULE_PAYMENT_STRIPEPAY_TEXT_PREV_CUST_UNTICK . '");
                                              }else{
                                              $("#stripe_tick").html("' . MODULE_PAYMENT_STRIPEPAY_TEXT_PREV_CUST_TICK . '");
-                                             }                    
-                                        
-                                        
-                                            });                                    
-                                        
-                                        
-                                            });                                        
+                                             }
+
+
+                                            });
+
+
+                                            });
                                            </script>';
         }
         if (MODULE_PAYMENT_STRIPEPAY_TESTMODE == 'Test') {
@@ -266,23 +266,23 @@ class stripepay extends base
         $confirmation['title'] .= '<script type="text/javascript">Stripe.setPublishableKey(\'' . $publishable_key . '\');</script>';
         $confirmation['title'] .= '<script type="text/javascript">
 
-                                                                
+
                                  $(document).ready(function() {
                                       $("form[name=checkout_confirmation]").submit(function(event) {
-                                if ( $(\'.existing_stripe\').attr(\'checked\')) {                                
+                                if ( $(\'.existing_stripe\').attr(\'checked\')) {
                             var form$ = $("form[name=checkout_confirmation]");
-                            form$.attr(\'action\', \'index.php?main_page=checkout_process\'); 
+                            form$.attr(\'action\', \'index.php?main_page=checkout_process\');
                             //hide button
                              $("#tdb5").hide();
-                            
+
 
                             // and submit
                             form$.get(0).submit();
-                                                              
-                                
-                                }else{      
+
+
+                                }else{
                                         Stripe.createToken({
-                                            name: $(\'.card-name\').val(),                    
+                                            name: $(\'.card-name\').val(),
                                             number: $(\'.card_number\').val(),';
         if (MODULE_PAYMENT_STRIPEPAY_CVV == 'True') {
             $confirmation['title'] .= 'cvc: $(\'.card_cvc\').val(),';
@@ -303,7 +303,7 @@ class stripepay extends base
                                         return false;
                                       });
                                     });
-                                    
+
                                 </script>';
         $confirmation['title'] .= '<script type="text/javascript">
                                 function stripeResponseHandler(status, response) {
@@ -314,13 +314,13 @@ class stripepay extends base
                             var form$ = $("form[name=checkout_confirmation]");
                             var token = response[\'id\'];
                             form$.append("<input type=\'hidden\' name=\'StripeToken\' value=\'" + token + "\'/>");
-                             if ( $(\'.new_stripe\').attr(\'checked\')) { 
+                             if ( $(\'.new_stripe\').attr(\'checked\')) {
                              form$.append("<input type=\'hidden\' name=\'StripeSaveCard\' value=\'YES\'/>");
                              }
-                            form$.attr(\'action\', \'index.php?main_page=checkout_process\'); 
+                            form$.attr(\'action\', \'index.php?main_page=checkout_process\');
                             //hide button
                              $("#tdb5").hide();
-                            
+
 
                             // and submit
                             form$.get(0).submit();
@@ -344,15 +344,15 @@ class stripepay extends base
         $error = '';
         // get the credit card details submitted by the form
         $token = $_POST['StripeToken'];
-        //existing customer 
+        //existing customer
         if (zen_not_null($_POST['StripeCustomerID'])) {
             if ($token == 'NONE') {
                 //charge the customer on existing card
                 try {
                     $charge = Stripe_Charge::create(array(
                         //"amount" => ($order->info['total']) * 100, // amount in cents
-						//fimgirl fix for total
-						"amount" =>floor(($order->info['total']) * 100),  
+                        //fimgirl fix for total
+                        "amount" =>floor(($order->info['total']) * 100),
                         "currency" => MODULE_PAYMENT_STRIPEPAY_CURRENCY,
                         "customer" => $_POST['StripeCustomerID']
                     ));
@@ -369,13 +369,13 @@ class stripepay extends base
                 try {
                     //update the card for the customer
                     $cu       = Stripe_Customer::retrieve($_POST['StripeCustomerID']);
-                    $cu->card = $token;
+                    $cu->source = $token;
                     $cu->save();
                     //charge the customer
                     $charge = Stripe_Charge::create(array(
                         //"amount" => ($order->info['total']) * 100, // amount in cents
-						//fimgirl fix for total
-						"amount" =>floor(($order->info['total']) * 100),  
+                        //fimgirl fix for total
+                        "amount" =>floor(($order->info['total']) * 100),
                         "currency" => MODULE_PAYMENT_STRIPEPAY_CURRENCY,
                         "customer" => $_POST['StripeCustomerID']
                     ));
@@ -392,8 +392,8 @@ class stripepay extends base
                     // create the charge on Stripe's servers - this will charge the user's card no customer object
                     $charge = Stripe_Charge::create(array(
                        // "amount" => ($order->info['total']) * 100, // amount in cents
-									//fimgirl fix for total
-						"amount" =>floor(($order->info['total']) * 100),  
+                                    //fimgirl fix for total
+                        "amount" =>floor(($order->info['total']) * 100),
                         "currency" => MODULE_PAYMENT_STRIPEPAY_CURRENCY,
                         "card" => $token,
                         "description" => $order->customer['email_address']
@@ -418,12 +418,12 @@ class stripepay extends base
                 // charge the Customer instead of the card
                 $charge   = Stripe_Charge::create(array(
                 //    "amount" => ($order->info['total']) * 100, // amount in cents
-										//fimgirl fix for total
-					"amount" =>floor(($order->info['total']) * 100),  
+                                        //fimgirl fix for total
+                    "amount" =>floor(($order->info['total']) * 100),
                     "currency" => MODULE_PAYMENT_STRIPEPAY_CURRENCY,
                     "customer" => $customer->id
                 ));
-            }              
+            }
 
             catch (Exception $e) {
                 $error = $e->getMessage();
@@ -437,8 +437,8 @@ class stripepay extends base
                 // create the charge on Stripe's servers - this will charge the user's card no customer object
                 $charge = Stripe_Charge::create(array(
                   //  "amount" => ($order->info['total']) * 100, // amount in cents
-											//fimgirl fix for total
-					"amount" =>floor(($order->info['total']) * 100),  
+                                            //fimgirl fix for total
+                    "amount" =>floor(($order->info['total']) * 100),
                     "currency" => MODULE_PAYMENT_STRIPEPAY_CURRENCY,
                     "card" => $token,
                     "description" => $order->customer['email_address']
@@ -453,14 +453,14 @@ class stripepay extends base
         //    die ( $charge);
         return false;
     }
-	
-	
-	
-	
+
+
+
+
     function after_process()
     {
         global $charge, $insert_id,  $db;
-	        //let's update the stripe_id table
+            //let's update the stripe_id table
         if (table_exists('stripe_data')) {
             $sql_data_array = array(
                 'orders_id' => zen_db_prepare_input($insert_id),
@@ -476,47 +476,47 @@ class stripepay extends base
                 'stripe_invoice' => zen_db_prepare_input($charge->invoice),
                 //  'stripe_object' => zen_db_prepare_input($charge->object);
                 'stripe_paid' => zen_db_prepare_input($charge->paid),
-                'stripe_address_city' => zen_db_prepare_input($charge->card->address_city),
-                'stripe_address_country' => zen_db_prepare_input($charge->card->address_country),
-                'stripe_address_line1' => zen_db_prepare_input($charge->card->address_line1),
-                'stripe_address_line1_check' => zen_db_prepare_input($charge->card->address_line1_check),
-                'stripe_address_line2' => zen_db_prepare_input($charge->card->address_line2),
-                'stripe_address_zip' => zen_db_prepare_input($charge->card->address_zip),
-                'stripe_address_zip_check' => zen_db_prepare_input($charge->card->address_zip_check),
-                'stripe_country' => zen_db_prepare_input($charge->card->country),
-                'stripe_fingerprint' => zen_db_prepare_input($charge->card->fingerprint),
-                'stripe_cvc_check' => zen_db_prepare_input($charge->card->cvc_check),
-                'stripe_name' => zen_db_prepare_input($charge->card->name),
-                'stripe_last4' => zen_db_prepare_input($charge->card->last4),
-                'stripe_exp_month' => zen_db_prepare_input($charge->card->exp_month),
-                'stripe_exp_year' => zen_db_prepare_input($charge->card->exp_year),
-                'stripe_type' => zen_db_prepare_input($charge->card->type)
+                'stripe_address_city' => zen_db_prepare_input($charge->source->address_city),
+                'stripe_address_country' => zen_db_prepare_input($charge->source->address_country),
+                'stripe_address_line1' => zen_db_prepare_input($charge->source->address_line1),
+                'stripe_address_line1_check' => zen_db_prepare_input($charge->source->address_line1_check),
+                'stripe_address_line2' => zen_db_prepare_input($charge->source->address_line2),
+                'stripe_address_zip' => zen_db_prepare_input($charge->source->address_zip),
+                'stripe_address_zip_check' => zen_db_prepare_input($charge->source->address_zip_check),
+                'stripe_country' => zen_db_prepare_input($charge->source->country),
+                'stripe_fingerprint' => zen_db_prepare_input($charge->source->fingerprint),
+                'stripe_cvc_check' => zen_db_prepare_input($charge->source->cvc_check),
+                'stripe_name' => zen_db_prepare_input($charge->source->name),
+                'stripe_last4' => zen_db_prepare_input($charge->source->last4),
+                'stripe_exp_month' => zen_db_prepare_input($charge->source->exp_month),
+                'stripe_exp_year' => zen_db_prepare_input($charge->source->exp_year),
+                'stripe_type' => zen_db_prepare_input($charge->source->brand)
             );
             zen_db_perform('stripe_data', $sql_data_array);
         }
         //now let's update the orders table
-        $db->Execute("update " . TABLE_ORDERS . " set 
-                               cc_type = '" . zen_db_prepare_input($charge->card->type) . "',
-                               cc_owner='" . zen_db_prepare_input($charge->card->name) . "',
-                               cc_expires='" . zen_db_prepare_input($charge->card->exp_month) . "/" . zen_db_prepare_input($charge->card->exp_year) . "',
-                               cc_number='XXXX-XXXX-XXXX-" . zen_db_prepare_input($charge->card->last4) . "'
+        $db->Execute("update " . TABLE_ORDERS . " set
+                               cc_type = '" . zen_db_prepare_input($charge->source->type) . "',
+                               cc_owner='" . zen_db_prepare_input($charge->source->name) . "',
+                               cc_expires='" . zen_db_prepare_input($charge->source->exp_month) . "/" . zen_db_prepare_input($charge->source->exp_year) . "',
+                               cc_number='XXXX-XXXX-XXXX-" . zen_db_prepare_input($charge->source->last4) . "'
                                     where
                                 orders_id = '" . $insert_id . "' ");
         //AVS checking
-        if (MODULE_PAYMENT_STRIPEPAY_AVS == 'True' && ($charge->card->address_line1_check !== 'pass' || $charge->card->address_zip_check !== 'pass')) {
+        if (MODULE_PAYMENT_STRIPEPAY_AVS == 'True' && ($charge->source->address_line1_check !== 'pass' || $charge->source->address_zip_check !== 'pass')) {
             $error = '';
-            if ($charge->card->address_line1_check == 'fail') {
+            if ($charge->source->address_line1_check == 'fail') {
                 $error .= MODULE_PAYMENT_STRIPEPAY_TEXT_AVS_FAILED . '. ';
-            } //$charge->card->address_line1_check == 'fail'
-            if ($charge->card->address_zip_check == 'fail') {
+            } //$charge->source->address_line1_check == 'fail'
+            if ($charge->source->address_zip_check == 'fail') {
                 $error .= MODULE_PAYMENT_STRIPEPAY_TEXT_ZIP_FAILED . '. ';
-            } //$charge->card->address_zip_check == 'fail'
-            if ($charge->card->address_line1_check == 'unchecked') {
+            } //$charge->source->address_zip_check == 'fail'
+            if ($charge->source->address_line1_check == 'unchecked') {
                 $error .= MODULE_PAYMENT_STRIPEPAY_TEXT_AVS_UNCHECKED . '. ';
-            } //$charge->card->address_line1_check == 'unchecked'
-            if ($charge->card->address_zip_check == 'unchecked') {
+            } //$charge->source->address_line1_check == 'unchecked'
+            if ($charge->source->address_zip_check == 'unchecked') {
                 $error .= MODULE_PAYMENT_STRIPEPAY_TEXT_ZIP_UNCHECKED;
-            } //$charge->card->address_zip_check == 'unchecked'
+            } //$charge->source->address_zip_check == 'unchecked'
             $sql_data_array2 = array(
                 'orders_status' => MODULE_PAYMENT_STRIPEPAY_AVS_FAILED
             );
@@ -530,16 +530,16 @@ class stripepay extends base
                 'comments' => $error
             );
             zen_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array3);
-        } //MODULE_PAYMENT_STRIPEPAY_AVS == 'True' && ($charge->card->address_line1_check !== 'pass' || $charge->card->address_zip_check !== 'pass')
+        } //MODULE_PAYMENT_STRIPEPAY_AVS == 'True' && ($charge->source->address_line1_check !== 'pass' || $charge->source->address_zip_check !== 'pass')
         //CVV checking
-        if (MODULE_PAYMENT_STRIPEPAY_CVV == 'True' && $charge->card->cvc_check !== 'pass') {
+        if (MODULE_PAYMENT_STRIPEPAY_CVV == 'True' && $charge->source->cvc_check !== 'pass') {
             $cvv_error = '';
-            if ($charge->card->cvc_check == 'fail') {
+            if ($charge->source->cvc_check == 'fail') {
                 $cvv_error .= MODULE_PAYMENT_STRIPEPAY_TEXT_CVV_FAILED . '. ';
-            } //$charge->card->cvc_check == 'fail'
-            elseif ($charge->card->cvc_check == 'unchecked') {
+            } //$charge->source->cvc_check == 'fail'
+            elseif ($charge->source->cvc_check == 'unchecked') {
                 $cvv_error .= MODULE_PAYMENT_STRIPEPAY_TEXT_CVV_UNCHECKED . '. ';
-            } //$charge->card->cvc_check == 'unchecked'
+            } //$charge->source->cvc_check == 'unchecked'
             $sql_data_array4 = array(
                 'orders_status' => MODULE_PAYMENT_STRIPEPAY_CVV_FAILED
             );
@@ -553,7 +553,7 @@ class stripepay extends base
                 'comments' => $cvv_error
             );
             zen_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array5);
-        } //MODULE_PAYMENT_STRIPEPAY_CVV == 'True' && $charge->card->cvc_check !== 'pass'
+        } //MODULE_PAYMENT_STRIPEPAY_CVV == 'True' && $charge->source->cvc_check !== 'pass'
         return false;
     }
     function get_error()
@@ -585,7 +585,7 @@ class stripepay extends base
         //send cheeky cURL to Blue Toucan
         cheeky_curl('installed');
         //
-		
+
         // OK lets add in a new order statuses  Stripe - failures
         $check_query = $db->Execute("select orders_status_id from " . TABLE_ORDERS_STATUS . " where orders_status_name = 'Stripe - CVV Failure' limit 1");
         if ($check_query->RecordCount() < 1) {
@@ -654,22 +654,22 @@ class stripepay extends base
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Testing Publishable Key', 'MODULE_PAYMENT_STRIPEPAY_TESTING_PUBLISHABLE_KEY', '', 'Testing Publishable Key  - obtainable in your Strip dashboard.', '6', '62', now())");
         //Live Secret key
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Live Secret key', 'MODULE_PAYMENT_STRIPEPAY_MERCHANT_LIVE_SECRET_KEY', '', 'Live Secret key  - obtainable in your Strip dashboard.', '6', '64', now())");
-        //Live Publishable key    
+        //Live Publishable key
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Live Publishable key', 'MODULE_PAYMENT_STRIPEPAY_LIVE_PUBLISHABLE_KEY', '', 'Live Publishable key  - obtainable in your Strip dashboard.', '6', '66', now())");
         //CVV - defaults to True
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable CVV/CVC checking', 'MODULE_PAYMENT_STRIPEPAY_CVV', 'True', 'Do you want to enable CVV/CVC checking at Stripe? <b>Highly recommended</b>', '6', '68', 'zen_cfg_select_option(array(\'True\', \'False\'), ', now())");
         //AVS - defaults to False
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable AVS check', 'MODULE_PAYMENT_STRIPEPAY_AVS', 'False', 'Do you want to enable Address Verification System checking at Stripe?', '6', '70', 'zen_cfg_select_option(array(\'True\', \'False\'), ', now())");
-		//create customer object?
-		 $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Create a Customer Object at Stripe?', 'MODULE_PAYMENT_STRIPEPAY_CREATE_OBJECT', 'True', 'Do you want to create Customer Objects at Stripe (True) or just charge the card every time (False)? ', '6', '72', 'zen_cfg_select_option(array(\'True\', \'False\'), ', now())");
+        //create customer object?
+         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Create a Customer Object at Stripe?', 'MODULE_PAYMENT_STRIPEPAY_CREATE_OBJECT', 'True', 'Do you want to create Customer Objects at Stripe (True) or just charge the card every time (False)? ', '6', '72', 'zen_cfg_select_option(array(\'True\', \'False\'), ', now())");
         //save card for customer
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Allow customers option not to save their card details?', 'MODULE_PAYMENT_STRIPEPAY_SAVE_CARD', 'True', 'Do you want to allow customers the option of not saving their card token with Stripe?', '6', '75', 'zen_cfg_select_option(array(\'True\', \'False\'), ', now())");
         $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Above option checked or unchecked?', 'MODULE_PAYMENT_STRIPEPAY_SAVE_CARD_CHECK', 'Checked', 'If the above is set to <b>True</b> do you want the option of saving to be checked or unchecked?', '6', '76', 'zen_cfg_select_option(array(\'Checked\', \'Unchecked\'), ', now())");
-		        $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Width of checkout payment fields', 'MODULE_PAYMENT_STRIPEPAY_WIDTH', '300', 'Depending on yuor template you may wish to make the credit card payment area in the checkout field wider or narrower. Insert a numerical value here for the desired width in pixels', '6', '80', now())");
-		
-		
-		
-		
+                $db->Execute("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Width of checkout payment fields', 'MODULE_PAYMENT_STRIPEPAY_WIDTH', '300', 'Depending on yuor template you may wish to make the credit card payment area in the checkout field wider or narrower. Insert a numerical value here for the desired width in pixels', '6', '80', now())");
+
+
+
+
         //new database table
         $db->Execute("CREATE TABLE IF NOT EXISTS `stripe_data` (
                   `stripe_id` int(11) NOT NULL auto_increment,
@@ -727,12 +727,12 @@ class stripepay extends base
             'MODULE_PAYMENT_STRIPEPAY_CVV_FAILED',
             'MODULE_PAYMENT_STRIPEPAY_CVV_UNCHECKED',
             'MODULE_PAYMENT_STRIPEPAY_AVS',
-			'MODULE_PAYMENT_STRIPEPAY_CREATE_OBJECT',
+            'MODULE_PAYMENT_STRIPEPAY_CREATE_OBJECT',
             'MODULE_PAYMENT_STRIPEPAY_AVS_FAILED',
             'MODULE_PAYMENT_STRIPEPAY_AVS_UNCHECKED',
             'MODULE_PAYMENT_STRIPEPAY_SAVE_CARD',
             'MODULE_PAYMENT_STRIPEPAY_SAVE_CARD_CHECK',
-			'MODULE_PAYMENT_STRIPEPAY_WIDTH'
+            'MODULE_PAYMENT_STRIPEPAY_WIDTH'
         );
     }
     // format prices without currency formatting
@@ -753,9 +753,9 @@ function table_exists($tablename, $database = false)
 {
     global $db;
     $res = $db->Execute("
-        SELECT COUNT(*) AS count 
-        FROM information_schema.tables 
-        WHERE table_schema = '" . DB_DATABASE . "' 
+        SELECT COUNT(*) AS count
+        FROM information_schema.tables
+        WHERE table_schema = '" . DB_DATABASE . "'
         AND table_name = '$tablename'
     ");
     if ($res->fields['count'] > 0) {

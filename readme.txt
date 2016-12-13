@@ -32,3 +32,9 @@ removed <noscript> tags in title field as it was throwing an error for admin ord
 ==== v 1.3.3 =====
 
 Changed TYPE=MyISAM to ENGINE=MyISAM in includes/modules/payment/stripepay.php
+
+==== v 1.3.4 =====
+
+Renamed all instances of `$charge->card` to `$charge->source` to comply with the updated Stripe API.
+Included month number in credit card expiration field for better usability
+Removed unused "_notes" directories left over from Dreamweaver
