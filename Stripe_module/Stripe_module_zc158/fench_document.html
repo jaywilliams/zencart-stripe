@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="GENERATOR" content="JustSystems Homepage Builder Version 18.0.14.0 for Windows">
+		<title></title>
+	</head>
+	<body>
+		<h2><font SIZE="+1">Instructions pour le module de paiement sécurisé Stripe pour Zen cart version 1.5.8</font></h2>
+		<p>Introduction</p>
+		<ol>
+			<li>Ce module est utilisé pour le paiement sécurisé Stripe. Vous devez vous inscrire et signer un contrat avec la compagnie Stripe. </li>
+			<li>Stripe est utilisable pour les paiements dans<a href="https://stripe.com/docs/currencies"> plus de 135 devises</a> et le module aussi.</li>
+			<li>Vous devez suivre les instructions ci-dessous avant l’installation, après l'installation et pendant l'utilisation.</li>
+		</ol>
+		<ul>
+			<li>Avant l'installation : </li>
+			<ul>
+				Faites une sauvegarde de toutes les bases de données, dossiers et fichiers, surtout les fichiers qui seront remplacés/écrasés. <br>
+				L'installation est de votre responsabilité seule.
+			</ul>
+			<li>Après l'installation : </li>
+			<ul>
+				Vérifiez l'utilisation en mode test.<br>
+				Vérifiez que le montant à payer est correct sur <a href="https://dashboard.stripe.com/test/payments?status[0]=successful">le tableau de bord Stripe</a>. <br>
+				Comparez avec le total de la commande sur la page Zen cart <b>admin Customers=&gt;Orders</b>.<br>
+				Vérifiez bien que les deux sont identiques. 
+			</ul>
+			<li>Installation : </li>
+			<ul>
+				Le mode test est la valeur par défaut quand le module est installé.<br> 
+				Après le test, n'oubliez pas de définir le <b>mode test sur &quot;false&quot;</b>.<br>
+				Ne divulguez pas les clés API fournie par <b>Stripe</b>.
+			</ul>
+			<li>IMPORTANT : Après avoir changé la clé API, vous devez suivre les étapes ci-dessous.</li>
+			<ul>
+				Allez à la page <b>Admin => Tools =>Install SQL patches</b>.<br>
+				Chargez le fichier <b>erase_stripe_recordes.sql</b> ou coller le code php <b>TRUNCATE ` stripe `;</b> dans la boîte texte <b>Enter the queryto be executed:</b>  et cliquez sur le bouton <b>Send</b>. 
+			</ul>
+			<li>Nous ne nous portons pas garant des dommages monétaires causés par ce module, ainsi, 
+				vous devez bien vérifier le module en utilisant le mode d'utilisation <b>Test</b> 
+				et contrôler que module fonctionne normalement durant le test.
+			</li>
+		</ul>
+		<p>Configuration nécessaire:</p>
+		<ol>
+			<li>Zen cart version 1.5.8 </li>
+			<li>SSL  (Le SSL est nécessaire. Si vous l'installez sans le SSL, une erreur se produit après avoir cliqué sur le bouton <b>Confirmation de commande</b>.) </li>
+			<li>PHP 7.3 à 8.2</li>
+		</ol>
+		<p>Installation</p>
+		<ol>
+			<li>Dézippez le fichier téléchargé. </li>
+			<li>Changez le nom du dossier template de <b>YOUR_TEMPLATE</b> par le nom de votre template.</li>
+			<ul>
+				<li>Renommer le dossier <b>YOUR_TEMPLATE</b> dans le <b>Stripe_module_zc158/www/includes/templates</b> par le nom de votre template.</li>
+			</ul>
+			<li>Les 5 fichiers suivants sont remplacés :</li>
+			<ul>
+				Stripe_module_zc158\www\includes\templates\YOUR_TEMPLATE\templates\tpl_account_default.php<br>
+				Stripe_module_zc158\www\includes\templates\YOUR_TEMPLATE\templates\tpl_checkout_confirmation_default.php<br>
+				Stripe_module_zc158\www\includes\languages\french\lang.account.php<br>
+				Stripe_module_zc158\www\includes\database_tables.php<br>
+				Stripe_module_zc158\www\includes\init_includes\init_header.php<br>
+			</ul>
+			<li>Chargez tous les fichiers 
+			<ul>
+				Transférer <b>Stripe_module_zc158</b> dans le dossier <b>includes</b> de Zen cart.
+			</ul>
+			<li>
+				Le module de paiement <b>Carte de paiement sécurisé (Stripe)</b> sera ajoutée sur la page <b>admin=>Modules=>Payment</b>. Sélectionnez le.<br> 
+				<img src="img_document/image12.jpg" width="447" height="254" border="0">
+			</li>
+			<li>Après avoir cliqué sur le bouton <b>&quot;+install module&quot;</b> le module de paiement Stripe sera installé et les items suivants apparaîtront : </li>
+			<ul>
+				Enable Stripe Secure Payment Module : True/False　Default : True <br>
+				Test Mode Stripe Secure Payment Module : 　True/False Default : True <br>
+				Payment Zone: Si une zone est séléctionner le module ne fonctionnera que pour cette zone. Default:blank <br>
+				Set order status : Ordre de classement des modules de paiement. Defaut:　0<br>
+				API Publishable key : Saisir la Clé publique de l'API fournie par stripe<br>
+				API Secret key : Saisir la Clé secrète de l'API fournie par stripe<br>
+				Test Mode - API Publishable key : Saisir la Clé test publique de l'API fournie par stripe<br>
+				Test Mode - API Secret key : Saisir la Clé test secrète de l'API fournie par stripe<br>
+			</ul>
+		</ol>		
+		<p>Mode test – module de paiement Stripe (Vous devez vérifier le module avant la mise en production)　</p>
+		<ol>
+			<li>Page Admin (mode test) </li>
+			<ul>
+				Saisir la clé API publique, la clé API secrète, la clé test API publique et la clé test API esecrète t cliquez sur le bouton Update. 
+			</ul>
+			<li>Page Store front （Test Mode)</li>
+			<ul>
+				Mettez quelques produits dans le panier et allez à la page de paiement.<br>
+				Après avoir sélectionné <b>Carte de paiement sécurisé (Stripe)</b> le formulaire de carte de crédit Stripe apparaîtrait comme suivant. <br>
+				Si le formulaire n'apparaît pas, vous avez peut-être entré la mauvaise clé API. <br>
+				<img src="img_document/image5.jpg" width="480" height="351" border="0">
+			</ul>
+			<ul>
+				Entrez le numéro de carte de crédit test 4242 4242 4242 4242, une date d'expiration supèrieure à la date du jour, entrez un numéro à 3 chiffre au hasard pour le CCV et cliquez sur le bouton <b>Confirmer la commande</b>. <br>
+				Allez dans le <a href="https://dashboard.stripe.com/dashboard">tableau de bord Stripe.</a> . Cliquez sur le bouton Payments and Succeeded  et Vérifiez les informations : montant total de la commande, nom du client, l'adresse email...<br> 
+				Contrôler l'adresse email, le montant total de la commande,... sur la page Zen cart <b>Admin => Customers => orders page</b> avec les informations de Stripe. <br>
+			</ul>
+		</ol>
+		<p>　NOTE： 
+			<ul>
+				Le système Stripe multiplie les devises avec 2 décimales, comme USD et EUR, par 100 avant de les envoyer aux serveurs Stripe. 
+				Le serveur Stripe convertit le nombre reçu à 1/100 et le gère. Le yen japonais n'a pas de décimale, donc le nombre est envoyé tel quel aux serveurs Stripe. 
+				Ce module converti automatiquement pour toutes les devines, mais testez-le avec toutes les devises que vous utilisez avant de la mise en production.
+				Nous ne nous portons pas garant des dommages monétaires causés par ce module
+				<br><br>
+				Comment supprimer les informations de carte de crédit des clients à partir de la page the storefront..<br>
+				Les informations des cartes de crédits des clients sont cryptées et enregistrées dans la base de données, mais elles peuvent être supprimées à la discrétion du client.
+				Les clients peuvent supprimer leurs informations de carte de crédit via le bouton de suppression des informations de la carte de crédit Stripe dans leur page <b>My Account</b>. 
+				Après suppression, cette indication disparaîtra.
+				<br>
+				<img src="img_document/image6.jpg" width="467" height="216" border="0">
+			</ul>
+		</p>
+		<p>Operations　(après avoir testé)</p>
+		<ol>
+			<li>Allez à la page <b>Admin =&gt; Modules =&gt;Payment page</b> et selectionner <b>Carte de paiement sécurisé (Stripe)</b> pour éditer.</li>
+			<li>Changez le bouton radio du module de paiement Stripe en mode test de <b>True</b> à False et cliquez sur le bouton <b>Update</b>. </li>
+			<li>Veuillez vous assurer que rien ne s'affiche en rouge à la suite du texte <b>Carte de paiement sécurisé (Stripe)</b>.</li> 
+			<li>Veuillez vous assurer que la phrase <b>STRIPE IS IN TESTING MODE</b> en rouge n'est pas affichée en haut des pages du storefront.</li>
+		</ol>
+		<p>IMPORTANT : 
+			<ul>
+				Après avoir changé la clé API, vous devez suivre les étapes ci-dessous :.<br>
+				Allez à la page <b>Go to Admin =&gt; Tools =&gt;Install SQL patches</b>, télécharger le fichier <b>erase_stripe_recordes.sql file</b> ou coller le code  <b>TRUNCATE ` stripe `;</b> dans la case <b>Enter the queryto be executed:</b> et cliquez sur le bouton<b>Send</b>.<br>
+				NOTE : After the test and changing the API key, the meaning of executing the above SQL. The API key and the Stripe customer ID are related, so if the API key is changed, the wrong Stripe customer ID is sent to the Stripe server and Stripe The payment form will disappear. All Stripe customer IDs will be deleted by the above procedure.<br>
+			</ul>
+		</p>
+		<p>NOTE : 
+			<ul>
+				Après le test ou après avoir changé la clé API, l'exécution du SQL ci-dessus permet de supprimer tous les ID Stripe des clients. En effet, la clé API et l'ID Stripe du client sont reliées, donc si la clé API est changée, le mauvaix ID Stripe du client est envoyée au serveur Stripe et le formulaire de paiement Stripe disparaîtra. Tous les ID Stripe des clients seront donc supprimés par la procédure ci-dessus. 
+			</ul>
+		</p>
+		<p>Désinstallation</p>
+		<ol>
+			<li>Allez à la page <b>Admin=&gt;Modules=&gt;Payment</b>. Selectionner <b>Carte de paiement sécurisé (Stripe)</b> et cliquez sur <b>-Remove module</b>.</li> 
+			<li>Allez à la page <b>Admin =&gt; Tools =&gt;Install SQL patches</b>Télecharger <b>uninstall_stripe.sql</b> ou coller le code  <b>DROP TABLE IF EXISTS `stripe`;</b>dans la case <b>Enter the queryto be executed:</b> et cliquez sur le bouton<b>Send</b>.</li>
+		</ol>
+		<p>Informations techniques</p>
+		<ol>
+			<li>Vérifiez la page de confirmation : formulaire de saisie Stripe <b><tpl_checkout_confirmation_default.php></b>.</li>
+			<ul>
+				<textarea STYLE="border-style:none; resize:none " cols="150" rows="4" readonly="readonly">
+&lt;form id=&quot;payment-form&quot;&gt;
+	&lt;div id=&quot;payment-head&quot; style=&quot;color: #2254dd;  font-size: 24px;  font-weight: bold; margin:24px 0 12px;&quot;&gt;Stripe&lt;/div&gt;    
+	&lt;div id=&quot;payment-element&quot;&gt;&lt;/div&gt;
+&lt;/form&gt;
+				</textarea>
+			</ul>
+			<li>Vérifiez la page de confirmation : message Stripe  <b>&lt;tpl_checkout_confirmation_default.php&gt;</b>.</li>
+			<ul>
+				<textarea STYLE="border-style:none; resize:none " cols="150" rows="1" readonly="readonly">
+&lt;div id=&quot;payment-message&quot; class=&quot;hidden&quot;&gt;&lt;/div&gt;
+				</textarea>
+			</ul>
+			<li>Vérifiez la page de confirmation : bouton de confirmation de commande <b>&lt;tpl_checkout_confirmation_default.php&gt;</b>
+			<ul>
+				<textarea STYLE="border-style:none; resize:none " cols="150" rows="4" readonly="readonly">
+&lt;button id=&quot;submit&quot;&gt;
+	&lt;div class=&quot;spinner hidden&quot; id=&quot;spinner&quot;&gt;&lt;/div&gt;
+	&lt;span id=&quot;button-text&quot;&gt;&lt;?php echo BUTTON_CONFIRM_ORDER_ALT; ?&gt;&lt;/span&gt;
+&lt;/button&gt;
+				</textarea>
+			</ul>
+			<li>Vérifiez la page de confirmation : Script <b>&lt;tpl_checkout_confirmation_default.php&gt;</b>.</li>
+			<ul>
+				<textarea STYLE="border-style:none; resize:none " cols="150" rows="11" readonly="readonly">
+&lt;script&gt;
+	if (typeof clientS === 'undefined') {
+		document.getElementById('btn_submit').display =&quot;block&quot;;
+		document.getElementById('checkout_confirmation').display =&quot;block&quot;;
+		document.getElementById('payment-form','submit').style.display =&quot;none&quot;;
+	}else{
+		document.getElementById('btn_submit').style.display =&quot;none&quot;;
+		document.getElementById('checkout_confirmation').style.display =&quot;none&quot;;
+		document.getElementById('payment-form','submit').display =&quot;block&quot;;
+	}
+&lt;/script&gt;
+				</textarea>
+			</ul>
+			<li>La page de mon compte : le bouton "SUPPRIMER les informations de la carte de crédit Stripe" <b>&lt;tpl_account_default.php&gt;</b>.</li>
+			<ul>
+				<textarea STYLE="border-style:none; resize:none " cols="150" rows="21" readonly="readonly">
+&lt;?php
+	$dir_delete_php = DIR_FS_CATALOG . DIR_WS_FUNCTIONS . 'stripe_data_delete.php';
+	require $dir_delete_php;
+	stripe_id_exist();
+	$class=&quot;&quot;;
+	if ($registered_customer === 'false') {
+		$class=&quot;hide&quot;;
+	}elseif($registered_customer === 'true'){
+		$class=&quot;&quot;;
+		echo '&lt;h2 style=&quot;color: #2254dd;  font-size: 24px;  font-weight: bold;&quot;&gt;Stripe&lt;/h2&gt;';
+		echo TEXT_STRIPE_CARD_INFORMATION ;
+	}
+?&gt;
+&lt;style&gt;
+	.hide{display:none;}
+&lt;/style&gt;
+&lt;form method=&quot;post&quot;&gt;
+	&lt;input type=&quot;submit&quot; name=&quot;Delete&quot; id=&quot;btn_delete&quot;
+	value=&quot;&lt;?PHP echo TEXT_DELETE_STRIPE ?&gt;&quot;
+	class=&quot;&lt;?PHP echo $class; ?&gt;&quot;&gt;
+&lt;/form&gt;
+				</textarea>
+			</ul>
+		</ol>
+	</body>
+</html>

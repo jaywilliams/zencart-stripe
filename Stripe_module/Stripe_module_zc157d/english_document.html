@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="GENERATOR" content="JustSystems Homepage Builder Version 18.0.14.0 for Windows">
+<title></title>
+</head>
+<body>
+<h2><font SIZE="+1">Stripe Secure Payment Module instructions for Zen cart version 1.5.7d</font></h2>
+<p>Introduction</p>
+<ol>
+  <li>This module is used for Stripe secure payment.You have to sign up and contract
+  with the Stripe company.<li>Stripe support processing payments in<a href="https://stripe.com/docs/currencies"> 135+ currencies</a>.and the module also supports 135+currencies.<li>You should follow these instructions bellow before installation
+  , after installation and  during operation.</ol>
+<ul>
+  <li>Before installation：Backup the all databases , folders and files. Espacially
+  back up overwrite files. Installation is on your own responsibilty. <li>After installaiton ： Check the operation in test mode.<span class="Y2IQFc" lang="en">Check the payment amount is correct on the <a href="https://dashboard.stripe.com/test/payments?status[0]=successful">Stripe dashboard page</a>. Compare with the order total on the Zen cart admin Customers=&gt;Orders
+  page Make sure both are the same.</span> 
+  <li><span class="HwtZe" jsaction="mouseup:BR6jm" jsname="jqKxS" lang="en"> <span jsaction="agoMJf:PFBcW;MZfLnc:P7O7bd;nt4Alf:pvnm0e,pfE8Hb,PFBcW;B01qod:dJXsye;H1e5u:iXtTIf;lYIUJf:hij5Wb;bmeZHc:iURhpf;Oxj3Xe:qAKMYb,yaf12d" jsname="txFAF" class="jCAhz ChMk0b" jscontroller="Gn4SMb"><span class="ryNqvb" jsaction="click:E6Tfl,GFf3ac,tMZCfe; contextmenu:Nqw7Te,QP7LD; mouseout:Nqw7Te; mouseover:E6Tfl,c2aHje" jsname="W297wb">Operation : Test mode is the default value when this module is installed.
+  After the test, Don't forget to set the test mode to &quot;false&quot;.Do
+  not disclose the secret key provided by <span class="HwtZe" jsaction="mouseup:BR6jm" jsname="jqKxS" lang="en"><span jsaction="agoMJf:PFBcW;MZfLnc:P7O7bd;nt4Alf:pvnm0e,pfE8Hb,PFBcW;B01qod:dJXsye;H1e5u:iXtTIf;lYIUJf:hij5Wb;bmeZHc:iURhpf;Oxj3Xe:qAKMYb,yaf12d" jsname="txFAF" class="jCAhz ChMk0b" jscontroller="Gn4SMb"><span class="ryNqvb" jsaction="click:E6Tfl,GFf3ac,tMZCfe; contextmenu:Nqw7Te,QP7LD; mouseout:Nqw7Te; mouseover:E6Tfl,c2aHje" jsname="W297wb">Stripe</span></span></span> .</span></span></span>
+  <li>IMPORTANT: After changing the API key, You must follow the steps below .<br>
+  Go to Admin =&gt; Tools =&gt;Install SQL patches page. Upload the erase_stripe_recordes.sql
+  file or paste php code TRUNCATE ` stripe `; in the &quot;Enter the queryto
+  be executed:&quot;text box.&nbsp;and press &quot;Send&quot; button. 
+  <li>We do not insure for any monetary damages caused by this module, therefore
+  you must check the module using the Test - mode operation  and confirm
+  that it is operating normally even after Testing.
+</ul>
+<p>Requirements</p>
+<ol>
+  <li>Zen cart version 1.5.7d <li>SSL ( SSL is necessary. if you install without SSL, error is occur after
+  pressing &quot;Order Confirm&quot; button.) <li>PHP 7.3 through 8.2
+
+</ol>
+<p>Installation</p>
+<ol>
+  <li>Unzip the downloaded file. <li>Change template folder name from YOUR_TEMPLATE to your template name.
+  <ul>
+    <li>Rename the YOUR_TEMPLATE folder in the Stripe_module_zc158/www/includes/templates
+    to your template name. </ul>
+  <li>The following 6 files are overwritten.
+  <ul>
+    <li>Stripe_module_zc157d\www\includes\templates\YOUR_TEMPLATE\templates\tpl_account_default.php
+    <li>Stripe_module_zc157d\www\includes\templates\YOUR_TEMPLATE\templates\tpl_checkout_confirmation_default.php
+    <li>Stripe_module_zc157d\www\includes\templates\YOUR_TEMPLATE\templates\tpl_checkout_payment_default.php
+    <li>Stripe_module_zc157d\www\includes\languages\english\lang.account.php
+    <li>Stripe_module_zc157d\www\includes\database_tables.php 
+    <li>Stripe_module_zc157d\www\includes\init_includes\init_header.php 
+    <li>Stripe_module_zc157d\www\includes\init_includes\modules\pages\checkout_confirmation\header_php.php
+  </ul>
+    <li>Upload all files
+  <ul>
+    <li><span class="HwtZe" jsaction="mouseup:BR6jm" jsname="jqKxS" lang="en"><span jsaction="agoMJf:PFBcW;MZfLnc:P7O7bd;nt4Alf:pvnm0e,pfE8Hb,PFBcW;B01qod:dJXsye;H1e5u:iXtTIf;lYIUJf:hij5Wb;bmeZHc:iURhpf;Oxj3Xe:qAKMYb,yaf12d" jsname="txFAF" class="jCAhz ChMk0b" jscontroller="Gn4SMb"><span class="ryNqvb" jsaction="click:E6Tfl,GFf3ac,tMZCfe; contextmenu:Nqw7Te,QP7LD; mouseout:Nqw7Te; mouseover:E6Tfl,c2aHje" jsname="W297wb">Paste </span></span></span>Stripe_module_zc157d=&gt;www=&gt;includes folder <span class="HwtZe" jsaction="mouseup:BR6jm" jsname="jqKxS" lang="en"><span jsaction="agoMJf:PFBcW;MZfLnc:P7O7bd;nt4Alf:pvnm0e,pfE8Hb,PFBcW;B01qod:dJXsye;H1e5u:iXtTIf;lYIUJf:hij5Wb;bmeZHc:iURhpf;Oxj3Xe:qAKMYb,yaf12d" jsname="txFAF" class="jCAhz ChMk0b" jscontroller="Gn4SMb"><span class="ryNqvb" jsaction="click:E6Tfl,GFf3ac,tMZCfe; contextmenu:Nqw7Te,QP7LD; mouseout:Nqw7Te; mouseover:E6Tfl,c2aHje" jsname="W297wb">to Zen cart's includes folder.</span></span></span></ul>
+  
+  <li>&quot;Stripe Payment : Credit Card&quot; column will be added on admin=&gt;Modules=&gt;Paymet
+  page. and select it.<img src="img_document/image12.jpg" width="447" height="254" border="0">
+  
+  <li>After pressing the &quot;+install module&quot; button, Stripe payment module
+  will be installed and following items will be appeared.
+  <ul>
+    <li>Enable Stripe Secure Payment Module : True/False　Default : True <li>Test Mode Stripe Secure Payment Module : 　True/False Default : True <li>Payment Zone : 　If a zone is selected, only enable this payment method
+    for that zone. Default:blank <li>Set order status : Set the status of orders made with this payment module
+    to this value Default :　0 <li>API Publishable key : Enter API Publishable Key provided by stripe <li>API Secret key : Enter API Secret Key provided by stripe <li>Test Mode - API Publishable key : Enter API Publishable Test Key provided
+    by stripe <li>Test Mode - API Secret key : Enter API Secret Test Key provided by stripe
+    </ul>
+
+</ol>
+<p>Test Mode - Stripe Payment Modue (You have to check the module before operation.)　</p>
+<ol>
+  <li>Admin page（Test Mode)
+  <ul>
+    <li> Fill in API Publishable key , API Secret key , Test Mode API PUblishable
+    Test Key and Test Mode - API SEcret Test Key. and Press the Update button.
+    </ul>
+  <li>Store front page（Test Mode)
+  <ul>
+    <li>Insert some products into the cart. and go to the check out page. <li>After selecting the &quot;Stripe payment : Credit card&quot; stripe credit card form will be appeared as follows. If the credit payment form does not appear, you may have entered the wrong API key. <li><img src="img_document/image5.jpg" width="480" height="351" border="0">
+  </ul>
+  <ul>
+    <li>Enter test visa credit card number 4242 4242 4242 4242 、Expireation date
+    is after next month , Enter a random 3-degit number in the CVC. And press
+    the &quot;Confirm Order&quot; button. 
+    <li>Go to the <a href="https://dashboard.stripe.com/dashboard">Stripe dashboard.</a> <a href="https://dashboard.stripe.com/payments?status[0]=successful">Click the Payments and Succeeded button</a> Check the informaions total amount ,customer name and e-mail address..
+    
+    <li>Confirm the email address and order total  on the Zen cart Admin =&gt; Customers =&gt; orders page. Compare zen cart informations total amount, customer name and e-mail address with the Stripe informations.
+  </ul>
+</ol>
+<p>　NOTE：<span class="HwtZe" jsaction="mouseup:BR6jm" jsname="jqKxS" lang="en"><span jsaction="agoMJf:PFBcW;MZfLnc:P7O7bd;nt4Alf:pvnm0e,pfE8Hb,PFBcW;B01qod:dJXsye;H1e5u:iXtTIf;lYIUJf:hij5Wb;bmeZHc:iURhpf;Oxj3Xe:qAKMYb,yaf12d" jsname="txFAF" class="jCAhz ChMk0b" jscontroller="Gn4SMb"><span class="ryNqvb" jsaction="click:E6Tfl,GFf3ac,tMZCfe; contextmenu:Nqw7Te,QP7LD; mouseout:Nqw7Te; mouseover:E6Tfl,c2aHje" jsname="W297wb">Stripe's system multiplies currencies with 2 decimal places, such as USD and EUR, by 100 before sending them to Stripe's servers.The Stripe server converts the received number to 1/100 and manages it. Japanese yen has no decimal point, so the number is sent to Stripe servers as-is.This module automatically converts for each currency, but test it with all the currencies you use before using it. We do not insure for any monetary damages caused by this module</span></span></span><br>
+<br>
+How to delete customer's credit card informations from the storefront page.<br>
+　<span class="HwtZe" jsaction="mouseup:BR6jm" jsname="jqKxS" lang="en"><span jsaction="agoMJf:PFBcW;MZfLnc:P7O7bd;nt4Alf:pvnm0e,pfE8Hb,PFBcW;B01qod:dJXsye;H1e5u:iXtTIf;lYIUJf:hij5Wb;bmeZHc:iURhpf;Oxj3Xe:qAKMYb,yaf12d" jsname="txFAF" class="jCAhz ChMk0b" jscontroller="Gn4SMb"><span class="ryNqvb" jsaction="click:E6Tfl,GFf3ac,tMZCfe; contextmenu:Nqw7Te,QP7LD; mouseout:Nqw7Te; mouseover:E6Tfl,c2aHje" jsname="W297wb">Customer's credit card information is encrypted and registered in the database, but can be deleted at the customer's discretion.</span></span> </span><br>
+　<span class="HwtZe" jsaction="mouseup:BR6jm" jsname="jqKxS" lang="en"><span jsaction="agoMJf:PFBcW;MZfLnc:P7O7bd;nt4Alf:pvnm0e,pfE8Hb,PFBcW;B01qod:dJXsye;H1e5u:iXtTIf;lYIUJf:hij5Wb;bmeZHc:iURhpf;Oxj3Xe:qAKMYb,yaf12d" jsname="txFAF" class="jCAhz ChMk0b" jscontroller="Gn4SMb"><span class="ryNqvb" jsaction="click:E6Tfl,GFf3ac,tMZCfe; contextmenu:Nqw7Te,QP7LD; mouseout:Nqw7Te; mouseover:E6Tfl,c2aHje" jsname="W297wb">Customer can delete it with the Stripe credit card information deletion
+button in &quot;My Account&quot; page. After deletion, this indication
+will be disappeared.</span></span></span><br>
+<br>
+<img src="img_document/image6.jpg" width="467" height="216" border="0"></p>
+<p>Operation　(After testing)</p>
+<ol>
+  <li>Go to Admin =&gt; Modules =&gt;Payment page. Select Stripe Payment : Credit
+  Card and press the Edit button. <li>Switch the Test mode Stripe Secure Payment Module radio button from True
+  to False. and press the Update button.<li>Make sure nothing is displayed in red in the Stripe Payment : Credit Card
+  field. <li>Make sure that the red &quot;STRIPE IS IN TESTING MODE&quot; is not displayed
+  at the top of the storefront pages. </ol>
+<p>IMPORTANT: After changing the API key, You must follow the steps below .<br>
+Go to Admin =&gt; Tools =&gt;Install SQL patches page. Upload the erase_stripe_recordes.sql file or paste php code TRUNCATE ` stripe `; in the &quot;Enter the queryto be executed:&quot;text box.&nbsp;and press &quot;Send&quot; button.<br>NOTE : After the test and changing the API key, the meaning of executing the above SQL. The API key and the Stripe customer ID are related, so if the API key is changed, the wrong Stripe customer ID is sent to the Stripe server and Stripe The payment form will disappear. All Stripe customer IDs will be deleted by the above procedure.<br>
+<br>
+NOTE : If you open the Stripe dashboard =&gt; Payments =&gt;All page, you will find many incomplete payments. Because stripe server creates pi_xxxxxxxxxxxxxxx every time when the Zen cart check out confirmation page is displayed. and Stripe server creates two pi_xxxxxxxxxxxxxxx for each payment. The cause is due to the specification of stripe server and Zencart.<br>
+</p>
+<p>Uninstallation</p>
+<ol>
+  <li>Go to the Admin=&gt;Modules=&gt;Payment page. Select &quot;Stripe Payment
+  : Credit Card&quot;. and press the uninstall button. 
+  <li>Go to Admin =&gt; Tools =&gt;Install SQL patches page. Upload the uninstall_stripe.sql
+  file or paste php code DROP TABLE IF EXISTS `stripe`; in the &quot;Enter
+  the queryto be executed:&quot;text box.&nbsp;and press &quot;Send&quot;
+  button.
+</ol>
+<p>Techinical information</p>
+<ol>
+  <li>Check out confirmation page : :Stripe input form&lt;tpl_checkout_confirmation_default.php&gt;
+  <ul>
+    <li>    &lt;form id=&quot;payment-form&quot;&gt;<br>
+    &lt;div id=&quot;payment-head&quot; style=&quot;color: #2254dd;  font-size: 24px;  font-weight: bold; margin:24px 0 12px;&quot;&gt;Stripe&lt;/div&gt;    <br>
+    &lt;div id=&quot;payment-element&quot;&gt;<br>
+    &lt;/div&gt;
+    <li>&lt;/form&gt;
+  </ul>
+  <li>Check out confirmation page : Stripe message &lt;tpl_checkout_confirmation_default.php&gt;
+  <ul>
+    <li>&lt;div id=&quot;payment-message&quot; class=&quot;hidden&quot;&gt;&lt;/div&gt;
+  </ul>
+  <li>Check out confirmation page : Order confirm button&lt;tpl_checkout_confirmation_default.php&gt;
+  <ul>
+    <li>      &lt;button id=&quot;submit&quot;&gt;<br>
+      &lt;div class=&quot;spinner hidden&quot; id=&quot;spinner&quot;&gt;&lt;/div&gt;<br>
+        &lt;span id=&quot;button-text&quot;&gt;&lt;?php echo BUTTON_CONFIRM_ORDER_ALT; ?&gt;&lt;/span&gt;<br>
+      &lt;/button&gt;
+  </ul>
+  <li>Check out confirmation page : Script&lt;tpl_checkout_confirmation_default.php&gt;
+  <ul>
+    <li>&lt;script&gt;<br>
+<br>
+if (typeof clientS === 'undefined') {<br>
+<br>
+    document.getElementById('btn_submit').display =&quot;block&quot;;<br>
+    document.getElementById('checkout_confirmation').display =&quot;block&quot;;<br>
+    document.getElementById('payment-form','submit').style.display =&quot;none&quot;;<br>
+  }else{<br>
+    document.getElementById('btn_submit').style.display =&quot;none&quot;;<br>
+    document.getElementById('checkout_confirmation').style.display =&quot;none&quot;;<br>
+    document.getElementById('payment-form','submit').display =&quot;block&quot;;<br>
+<br>
+  }<br>
+&lt;/script&gt;</ul>
+  <li>My account page : Stripe credit card information DELETE button&lt;tpl_account_default.php&gt;
+  <ul>
+    <li>&lt;?php<br>
+$dir_delete_php = DIR_FS_CATALOG . DIR_WS_FUNCTIONS . 'stripe_data_delete.php';<br>
+require $dir_delete_php;<br>
+stripe_id_exist();<br>
+$class=&quot;&quot;;<br>
+if ($registered_customer === 'false') {<br>
+  $class=&quot;hide&quot;;<br>
+}elseif($registered_customer === 'true'){<br>
+  $class=&quot;&quot;;<br>
+  echo '&lt;h2 style=&quot;color: #2254dd;  font-size: 24px;  font-weight: bold;&quot;&gt;Stripe&lt;/h2&gt;';<br>
+  echo TEXT_STRIPE_CARD_INFORMATION ;<br>
+}<br>
+?&gt;<br>
+&lt;style&gt;<br>
+.hide{display:none;}<br>
+&lt;/style&gt;<br>
+&lt;form method=&quot;post&quot;&gt;<br>
+&lt;input type=&quot;submit&quot; name=&quot;Delete&quot; id=&quot;btn_delete&quot;<br>
+value=&quot;&lt;?PHP echo TEXT_DELETE_STRIPE ?&gt;&quot;<br>
+class=&quot;&lt;?PHP echo $class; ?&gt;&quot;&gt;<br>
+<br>
+&lt;/form&gt;
+  </ul>
+</ol>
+</body>
+</html>
