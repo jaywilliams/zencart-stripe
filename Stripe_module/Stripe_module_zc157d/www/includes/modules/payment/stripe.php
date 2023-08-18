@@ -20,7 +20,7 @@
     public $code;
     /**
      * $description is a soft name for this payment method
-     * @var string 
+     * @var string
      */
     public $description;
     /**
@@ -71,7 +71,7 @@ function __construct() {
 
   if ((int)MODULE_PAYMENT_STRIPE_STATUS_ID > 0) {
     $this->order_status = MODULE_PAYMENT_STRIPE_STATUS_ID;
-  
+
   }
 
   if (is_object($order)) $this->update_status();
@@ -144,7 +144,7 @@ function pre_confirmation_check() {
     }
 
   $amount_total=round($order->info['total']*$order->info['currency_value'],$decimal_places)*$multiplied_by;
-  
+
   $fullname = $order->billing['firstname'].= $order->billing['lastname'];
   $email = $order->customer['email_address'];
   $user_id = $_SESSION['customer_id'];
@@ -199,35 +199,36 @@ function install() {
     return 'failed';
   }
 
-  $db-> execute("DROP TABLE IF EXISTS stripe ;");
-  $db-> execute("CREATE TABLE stripe(id INT(11) AUTO_INCREMENT PRIMARY KEY,customers_id INT(11),Stripe_Customers_id VARCHAR(32))");
+  $db->Execute("DROP TABLE IF EXISTS " . TABLE_STRIPE . " ;");
+
+  $db->Execute("CREATE TABLE " . TABLE_STRIPE . " (id INT(11) AUTO_INCREMENT PRIMARY KEY,customers_id INT(11),Stripe_Customers_id VARCHAR(32))");
 
   $db->Execute("insert into " . TABLE_CONFIGURATION . " (`configuration_title`, `configuration_key`, `configuration_value`, `configuration_description`, `configuration_group_id`, `sort_order`, `last_modified`, `date_added`, `use_function`, `set_function`, `val_function`) VALUES('Enable Stripe Secure Payment Module', 'MODULE_PAYMENT_STRIPE_STATUS', 'True', 'Do you want to accept Stripe Secure Payment?', 6, 1, NULL, now(), NULL, 'zen_cfg_select_option(array(\'True\', \'False\'), ', NULL)");
 
   $db->Execute("insert into " . TABLE_CONFIGURATION . " (`configuration_title`, `configuration_key`, `configuration_value`, `configuration_description`, `configuration_group_id`, `sort_order`, `last_modified`, `date_added`, `use_function`, `set_function`, `val_function`) VALUES
   ('API Publishable Key:', 'MODULE_PAYMENT_STRIPE_PUBLISHABLE_KEY', '', 'Enter API Publishable Key provided by stripe', 6, 1, NULL, now(), NULL, NULL, NULL)");
 
-  $db->Execute("insert into " . TABLE_CONFIGURATION . " (`configuration_title`, `configuration_key`, `configuration_value`, `configuration_description`, `configuration_group_id`, `sort_order`, `last_modified`, `date_added`, `use_function`, `set_function`, `val_function`) VALUES      
+  $db->Execute("insert into " . TABLE_CONFIGURATION . " (`configuration_title`, `configuration_key`, `configuration_value`, `configuration_description`, `configuration_group_id`, `sort_order`, `last_modified`, `date_added`, `use_function`, `set_function`, `val_function`) VALUES
   ('Sort order of display.', 'MODULE_PAYMENT_STRIPE_SORT_ORDER', '0', 'Sort order of display. Lowest is displayed first.', 6, 1, NULL, now(), NULL, NULL, NULL)");
 
   $db->Execute("insert into " . TABLE_CONFIGURATION . " (`configuration_title`, `configuration_key`, `configuration_value`, `configuration_description`, `configuration_group_id`, `sort_order`, `last_modified`, `date_added`, `use_function`, `set_function`, `val_function`) VALUES
   ('Payment Zone', 'MODULE_PAYMENT_STRIPE_ZONE', '0', 'If a zone is selected, only enable this payment method for that zone.', 6, 1, NULL, now(), 'zen_get_zone_class_title', 'zen_cfg_pull_down_zone_classes(', NULL)");
 
-  $db->Execute("insert into " . TABLE_CONFIGURATION . " (`configuration_title`, `configuration_key`, `configuration_value`, `configuration_description`, `configuration_group_id`, `sort_order`, `last_modified`, `date_added`, `use_function`, `set_function`, `val_function`) VALUES      
+  $db->Execute("insert into " . TABLE_CONFIGURATION . " (`configuration_title`, `configuration_key`, `configuration_value`, `configuration_description`, `configuration_group_id`, `sort_order`, `last_modified`, `date_added`, `use_function`, `set_function`, `val_function`) VALUES
   ('Set Order Status', 'MODULE_PAYMENT_STRIPE_STATUS_ID', '0', 'Set the status of orders made with this payment module to this value', 6, 1, NULL, now(), 'zen_get_order_status_name', 'zen_cfg_pull_down_order_statuses(', NULL)");
 
   $db->Execute("insert into " . TABLE_CONFIGURATION . " (`configuration_title`, `configuration_key`, `configuration_value`, `configuration_description`, `configuration_group_id`, `sort_order`, `last_modified`, `date_added`, `use_function`, `set_function`, `val_function`) VALUES
   ('API Secret Key:', 'MODULE_PAYMENT_STRIPE_SECRET_KEY', '', 'Enter API Secret Key provided by stripe', 6, 1, NULL, now(), 'zen_cfg_password_display', NULL, NULL)");
 
-  $db->Execute("insert into " . TABLE_CONFIGURATION . " (`configuration_title`, `configuration_key`, `configuration_value`, `configuration_description`, `configuration_group_id`, `sort_order`, `last_modified`, `date_added`, `use_function`, `set_function`, `val_function`) VALUES      
+  $db->Execute("insert into " . TABLE_CONFIGURATION . " (`configuration_title`, `configuration_key`, `configuration_value`, `configuration_description`, `configuration_group_id`, `sort_order`, `last_modified`, `date_added`, `use_function`, `set_function`, `val_function`) VALUES
   ('Test Mode - API Publishable Test Key:', 'MODULE_PAYMENT_STRIPE_PUBLISHABLE_TEST_KEY', '', 'Enter API Publishable Test Key provided by stripe', 6, 1, NULL, now(), NULL, NULL, NULL)");
 
   $db->Execute("insert into " . TABLE_CONFIGURATION . " (`configuration_title`, `configuration_key`, `configuration_value`, `configuration_description`, `configuration_group_id`, `sort_order`, `last_modified`, `date_added`, `use_function`, `set_function`, `val_function`) VALUES
   ('Test Mode - API Secret Test Key:', 'MODULE_PAYMENT_STRIPE_SECRET_TEST_KEY', '', 'Enter API Secret Test Key provided by stripe', 6, 1, NULL, now(), 'zen_cfg_password_display', NULL, NULL)");
 
-  $db->Execute("insert into " . TABLE_CONFIGURATION . " (`configuration_title`, `configuration_key`, `configuration_value`, `configuration_description`, `configuration_group_id`, `sort_order`, `last_modified`, `date_added`, `use_function`, `set_function`, `val_function`) VALUES      
+  $db->Execute("insert into " . TABLE_CONFIGURATION . " (`configuration_title`, `configuration_key`, `configuration_value`, `configuration_description`, `configuration_group_id`, `sort_order`, `last_modified`, `date_added`, `use_function`, `set_function`, `val_function`) VALUES
   ('Test Mode Stripe Secure Payment Module', 'MODULE_PAYMENT_STRIPE_TEST_MODE', 'True', 'Enter your Stripe API test publishable key and secret key.\r\nNote: Don\'t forget to set it to False after testing.', 6, 1, NULL, now(), NULL, 'zen_cfg_select_option(array(\'True\', \'False\'), ', NULL)");
-  
+
 }
 
 function remove() {
